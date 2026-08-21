@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>💰 你適合存多少錢呢！</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #faf8f5;
+      --card-bg: #ffffff;
+      --primary-dark: #a0826d;
+      --primary-mid: #c4a993;
+      --primary-light: #f3ece4;
+      --primary-soft: #fbf7f2;
+      --text-main: #5c4e43;
+      --text-muted: #a39589;
+      --border-color: #eee7de;
+      --shadow: 0 10px 30px -5px rgba(196, 169, 147, 0.12), 0 4px 12px -2px rgba(196, 169, 147, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+      background: var(--card-bg);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+    }
+
+    .header {
+      background-color: var(--primary-mid);
+      color: #ffffff;
+      padding: 32px 24px 24px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+    }
+
+    .header p {
+      font-size: 13px;
+      margin-top: 6px;
+      opacity: 0.92;
+      font-weight: 400;
+    }
+
+    .content {
+      padding: 28px 24px 32px;
+    }
+
+    .input-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    .input-wrapper span {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--primary-dark);
+      font-weight: 500;
+      font-size: 15px;
+    }
+
+    .input-wrapper input {
+      width: 100%;
+      padding: 12px 12px 12px 32px;
+      border: 1.5px solid var(--border-color);
+      border-radius: 12px;
+      background-color: var(--primary-soft);
+      color: var(--text-main);
+      font-size: 16px;
+      font-weight: 700;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .input-wrapper input:focus {
+      border-color: var(--primary-mid);
+      background-color: #ffffff;
+      box-shadow: 0 0 0 3px rgba(196, 169, 147, 0.18);
+    }
+
+    .btn-calc {
+      width: 100%;
+      padding: 14px;
+      background-color: var(--primary-dark);
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(160, 130, 109, 0.2);
+    }
+
+    .btn-calc:hover {
+      background-color: #927460;
+      transform: translateY(-1px);
+    }
+
+    .result-section {
+      margin-top: 24px;
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .summary-box {
+      background-color: var(--primary-soft);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 20px;
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--primary-dark);
+    }
+
+    .result-level {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 8px;
+    }
+
+    .result-desc {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--text-main);
+      text-align: left;
+    }
+
+    .cards-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .tier-card {
+      background-color: var(--primary-soft);
+      border-radius: 16px;
+      padding: 16px 10px;
+      text-align: center;
+      border: 1px solid var(--border-color);
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .tier-card.recommended {
+      background-color: var(--primary-mid);
+      color: #ffffff;
+      border-color: var(--primary-mid);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 16px rgba(196, 169, 147, 0.28);
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .tier-card.recommended .card-title {
+      color: #ffffff;
+    }
+
+    .amount {
+      font-family: 'Playfair Display', serif;
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--primary-dark);
+    }
+
+    .tier-card.recommended .amount {
+      color: #ffffff;
+    }
+
+    .card-desc {
+      font-size: 11px;
+      line-height: 1.4;
+      color: var(--text-muted);
+    }
+
+    .tier-card.recommended .card-desc {
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    .footer {
+      margin-top: 24px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    @media (max-width: 400px) {
+      .cards-container {
+        grid-template-columns: 1fr;
+      }
+      .tier-card.recommended {
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <h1>💰 你適合存多少錢呢！</h1>
+      <p>專屬你的溫柔存錢計畫</p>
+    </div>
+
+    <div class="content">
+      <div class="input-grid">
+        <div class="input-group">
+          <label for="income">每月收入 ($)</label>
+          <div class="input-wrapper">
+            <span>$</span>
+            <input type="number" id="income" inputmode="numeric" value="35000" placeholder="0" min="0">
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="expenses">必要支出 ($)</label>
+          <div class="input-wrapper">
+            <span>$</span>
+            <input type="number" id="expenses" inputmode="numeric" value="23000" placeholder="0" min="0">
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-calc" onclick="calculateSavings()">開始計算</button>
+
+      <div class="result-section" id="resultSection">
+        <!-- 狀態評估與溫柔提醒 -->
+        <div class="summary-box" id="summaryBox">
+          <div class="result-level" id="levelText"></div>
+          <div class="result-desc" id="descText"></div>
+        </div>
+
+        <!-- 建議存款目標卡片 -->
+        <div class="cards-container" id="cardsContainer">
+          <div class="tier-card">
+            <div>
+              <div class="card-title">🌱 舒適存</div>
+              <div class="amount" id="comfortableText">$0</div>
+            </div>
+            <div class="card-desc">不太影響目前生活<br>適合先建立習慣</div>
+          </div>
+
+          <div class="tier-card recommended">
+            <div>
+              <div class="card-title">🤍 建議存</div>
+              <div class="amount" id="recommendedText">$0</div>
+            </div>
+            <div class="card-desc">依照目前收支狀況<br>最推薦的存款目標</div>
+          </div>
+
+          <div class="tier-card">
+            <div>
+              <div class="card-title">🔥 挑戰存</div>
+              <div class="amount" id="challengingText">$0</div>
+            </div>
+            <div class="card-desc">想加快累積速度<br>可以試著挑戰看看</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">＠tt_saving</div>
+      <div class="footer" style="margin-top: 6px; font-size: 0.8rem;">「不是一定要存多少，而是看看現在的你，適合從多少開始。」</div>
+    </div>
+  </div>
+
+  <script>
+    function calculateSavings() {
+      const income = Number(document.getElementById('income').value);
+      const expenses = Number(document.getElementById('expenses').value);
+
+      // 輸入值防呆校驗
+      if (isNaN(income) || income <= 0) {
+        alert('請輸入有效的每月收入！');
+        return;
+      }
+
+      if (isNaN(expenses) || expenses < 0) {
+        alert('必要支出不能為負數喔！');
+        return;
+      }
+
+      const disposable = income - expenses;
+      const ratio = disposable / income;
+
+      const levelText = document.getElementById('levelText');
+      const descText = document.getElementById('descText');
+      const summaryBox = document.getElementById('summaryBox');
+      const cardsContainer = document.getElementById('cardsContainer');
+
+      // 狀況 1：支出超過收入（透支）
+      if (disposable < 0) {
+        levelText.innerText = '目前先別逼自己存錢 🤍';
+        descText.innerText = '目前的必要開銷高於收入，生活可能稍微緊繃一些。現在更重要的不是勉強存款，而是先照顧好生活、慢慢調整支出結構，等狀況穩定再開始喔！';
+        summaryBox.style.borderColor = '#c06c52';
+        cardsContainer.style.display = 'none';
+      } 
+      // 狀況 2：雙條件保護（剩餘 < $2,000 或 剩餘占收入 <= 5%）
+      else if (disposable < 2000 || ratio <= 0.05) {
+        levelText.innerText = '目前先以生活穩定為主 🤍';
+        descText.innerText = '扣除必要支出後，目前能自由運用的空間比較有限。如果還是想養成存錢習慣，可以先從每月 $100 ～ $500 開始，金額不用大，先讓存錢變成習慣就很好。';
+        summaryBox.style.borderColor = '#d49b59';
+        cardsContainer.style.display = 'none';
+      } 
+      // 狀況 3：正常試算三階目標
+      else {
+        let rComfort = 0;
+        let rRecommend = 0;
+        let rChallenge = 0;
+
+        if (ratio <= 0.10) {
+          rComfort = 0.20; rRecommend = 0.30; rChallenge = 0.40;
+        } else if (ratio <= 0.20) {
+          rComfort = 0.25; rRecommend = 0.35; rChallenge = 0.50;
+        } else if (ratio <= 0.30) {
+          rComfort = 0.30; rRecommend = 0.45; rChallenge = 0.60;
+        } else if (ratio <= 0.40) {
+          rComfort = 0.35; rRecommend = 0.50; rChallenge = 0.65;
+        } else {
+          rComfort = 0.40; rRecommend = 0.55; rChallenge = 0.70;
+        }
+
+        // 四捨五入至百位
+        const comfortable = Math.round((disposable * rComfort) / 100) * 100;
+        const recommended = Math.round((disposable * rRecommend) / 100) * 100;
+        const challenging = Math.round((disposable * rChallenge) / 100) * 100;
+
+        levelText.innerText = '這是為你規劃的存款目標 ✨';
+        descText.innerText = `扣除必要支出後，你每個月還有約 $${disposable.toLocaleString()} 的彈性空間。除了存錢之外，記得也留些預算給娛樂與生活品質喔！`;
+        summaryBox.style.borderColor = '#a0826d';
+
+        document.getElementById('comfortableText').innerText = '$' + comfortable.toLocaleString();
+        document.getElementById('recommendedText').innerText = '$' + recommended.toLocaleString();
+        document.getElementById('challengingText').innerText = '$' + challenging.toLocaleString();
+
+        cardsContainer.style.display = 'grid';
+      }
+
+      document.getElementById('resultSection').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
