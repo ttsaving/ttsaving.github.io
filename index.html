@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#faf8f5">
-  <title>拾月｜存錢小工具</title>
+  <title>存錢從了解自己開始－拾月</title>
 
   <style>
     :root {
@@ -970,10 +970,11 @@
         get(id).hidden = key !== page;
       });
 
+      // 這裡已改為你指定的名稱「存錢從了解自己開始－拾月」
       const titles = {
-        home: "拾月｜存錢小工具",
-        saving: "拾月｜你適合存多少錢",
-        "small-money": "拾月｜小錢也有大大的累積"
+        home: "存錢從了解自己開始－拾月",
+        saving: "你適合存多少錢－拾月",
+        "small-money": "小錢也有大大的累積－拾月"
       };
 
       document.title = titles[page];
@@ -1043,7 +1044,6 @@
       const summaryBox = get("summaryBox");
       const cardsContainer = get("cardsContainer");
 
-      // 狀況一：支出超過收入
       if (disposable < 0) {
         levelText.textContent = "目前先別逼自己存錢 🤍";
 
@@ -1053,8 +1053,6 @@
         summaryBox.style.borderLeftColor = "#c06c52";
         cardsContainer.hidden = true;
       }
-
-      // 狀況二：剩餘不足 2,000，或剩餘比例不超過 5%
       else if (disposable < 2000 || ratio <= 0.05) {
         levelText.textContent = "目前先以生活穩定為主 🤍";
 
@@ -1064,8 +1062,6 @@
         summaryBox.style.borderLeftColor = "#d49b59";
         cardsContainer.hidden = true;
       }
-
-      // 狀況三：計算三階存款目標
       else {
         let rComfort;
         let rRecommend;
@@ -1093,7 +1089,6 @@
           rChallenge = 0.70;
         }
 
-        // 四捨五入至百位
         const comfortable =
           Math.round(disposable * rComfort / 100) * 100;
 
@@ -1125,7 +1120,6 @@
       get("resultSection").hidden = false;
     }
 
-    // 收支修改後隱藏舊結果，避免誤認為已重新計算
     ["income", "expenses"].forEach(id => {
       get(id).addEventListener("input", () => {
         get("resultSection").hidden = true;
@@ -1318,7 +1312,7 @@
     });
 
     showPage();
-    calculateSavings(); // 讓工具一載入時預設計算一次預設數值
+    calculateSavings();
     updateSmallMoney();
   </script>
 </body>
