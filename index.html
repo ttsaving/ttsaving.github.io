@@ -2,398 +2,1086 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>💰 你適合存多少錢呢！</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f3ed">
+  <title>拾月｜存錢小工具</title>
+
   <style>
     :root {
-      --bg-color: #faf8f5;
-      --card-bg: #ffffff;
-      --primary-dark: #a0826d;
-      --primary-mid: #c4a993;
-      --primary-light: #f3ece4;
-      --primary-soft: #fbf7f2;
-      --text-main: #5c4e43;
-      --text-muted: #a39589;
-      --border-color: #eee7de;
-      --shadow: 0 10px 30px -5px rgba(196, 169, 147, 0.12), 0 4px 12px -2px rgba(196, 169, 147, 0.06);
+      --bg: #f7f3ed;
+      --card: #fffdf9;
+      --primary: #8c6747;
+      --hover: #735235;
+      --text: #4a3b32;
+      --sub: #7a6b63;
+      --input: #fcfaf7;
+      --border: #e6ded6;
     }
 
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
     }
 
     body {
-      font-family: 'Noto Sans TC', sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-main);
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family:
+        -apple-system, BlinkMacSystemFont,
+        "Segoe UI", "Microsoft JhengHei", sans-serif;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    button:focus-visible,
+    a:focus-visible,
+    input:focus-visible,
+    select:focus-visible {
+      outline: 3px solid #bea58d;
+      outline-offset: 3px;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .site-header {
+      max-width: 1000px;
+      margin: auto;
+      padding: 22px;
       display: flex;
-      justify-content: center;
       align-items: center;
-      min-height: 100vh;
-      padding: 20px;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 480px;
-      background: var(--card-bg);
-      border-radius: 24px;
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      border: 1px solid var(--border-color);
-    }
-
-    .header {
-      background-color: var(--primary-mid);
-      color: #ffffff;
-      padding: 32px 24px 24px;
-      text-align: center;
-    }
-
-    .header h1 {
-      font-size: 22px;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-    }
-
-    .header p {
-      font-size: 13px;
-      margin-top: 6px;
-      opacity: 0.92;
-      font-weight: 400;
-    }
-
-    .content {
-      padding: 28px 24px 32px;
-    }
-
-    .input-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+      justify-content: space-between;
       gap: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      border: 0;
+      padding: 0;
+      background: transparent;
+      color: var(--primary);
+      font-size: 23px;
+      font-weight: 800;
+      letter-spacing: 4px;
+      white-space: nowrap;
+    }
+
+    .tagline {
+      color: var(--sub);
+      font-size: 11px;
+      text-align: right;
+      line-height: 1.7;
+    }
+
+    main {
+      max-width: 1000px;
+      min-height: calc(100svh - 155px);
+      margin: auto;
+      padding: 38px 20px;
+    }
+
+    .intro {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .eyebrow {
+      color: #a18a71;
+      font-size: 10px;
+      letter-spacing: 3px;
+    }
+
+    h1 {
+      margin: 16px 0;
+      font-size: clamp(25px, 5vw, 36px);
+      line-height: 1.5;
+    }
+
+    .intro p {
+      margin: 0;
+      color: var(--sub);
+      font-size: 14px;
+      line-height: 1.9;
+    }
+
+    .home {
+      max-width: 460px;
+      margin: 18px auto;
+    }
+
+    .menu {
+      display: grid;
+      gap: 16px;
+    }
+
+    .menu-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 25px 22px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      color: inherit;
+      text-decoration: none;
+      box-shadow: 0 6px 20px rgba(140, 103, 71, 0.04);
+      transition: transform .2s, border-color .2s;
+    }
+
+    .menu-card:hover {
+      transform: translateY(-3px);
+      border-color: #bea58d;
+    }
+
+    .icon {
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      background: #f1e8db;
+      border-radius: 15px;
+      font-size: 25px;
+    }
+
+    .menu-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .tool-number {
+      display: block;
+      margin-bottom: 7px;
+      color: #a38b73;
+      font-size: 10px;
+      letter-spacing: 2px;
+    }
+
+    .menu-card h2 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      line-height: 1.5;
+    }
+
+    .menu-card p {
+      margin: 0;
+      color: var(--sub);
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    .arrow {
+      color: var(--primary);
+      font-size: 20px;
+    }
+
+    .back {
+      display: inline-block;
+      margin-bottom: 25px;
+      color: var(--primary);
+      font-size: 14px;
+      text-decoration: none;
+    }
+
+    .card {
+      padding: 28px;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      background: var(--card);
+      box-shadow: 0 6px 20px rgba(140, 103, 71, .04);
+    }
+
+    .saving-card {
+      max-width: 460px;
+      margin: auto;
+    }
+
+    .card h2 {
+      margin: 0 0 22px;
+      font-size: 18px;
+    }
+
+    .input-group {
       margin-bottom: 20px;
     }
 
-    .input-group label {
+    label {
       display: block;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-muted);
-      margin-bottom: 8px;
+      margin-bottom: 9px;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.6;
     }
 
-    .input-wrapper {
-      position: relative;
-    }
-
-    .input-wrapper span {
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--primary-dark);
-      font-weight: 500;
-      font-size: 15px;
-    }
-
-    .input-wrapper input {
+    input,
+    select {
       width: 100%;
-      padding: 12px 12px 12px 32px;
-      border: 1.5px solid var(--border-color);
-      border-radius: 12px;
-      background-color: var(--primary-soft);
-      color: var(--text-main);
+      min-width: 0;
+      padding: 13px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--input);
+      color: var(--text);
       font-size: 16px;
-      font-weight: 700;
-      outline: none;
-      transition: all 0.2s ease;
     }
 
-    .input-wrapper input:focus {
-      border-color: var(--primary-mid);
-      background-color: #ffffff;
-      box-shadow: 0 0 0 3px rgba(196, 169, 147, 0.18);
+    input::placeholder {
+      color: #b5aba4;
+      font-size: 13px;
     }
 
-    .btn-calc {
+    .primary-button {
       width: 100%;
       padding: 14px;
-      background-color: var(--primary-dark);
-      color: #ffffff;
-      border: none;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 12px rgba(160, 130, 109, 0.2);
+      border: 0;
+      border-radius: 10px;
+      background: var(--primary);
+      color: white;
+      font-size: 15px;
+      font-weight: 600;
     }
 
-    .btn-calc:hover {
-      background-color: #927460;
-      transform: translateY(-1px);
+    .primary-button:hover {
+      background: var(--hover);
     }
 
-    .result-section {
+    .hint {
+      margin-top: 10px;
+      color: #93816f;
+      font-size: 11px;
+      line-height: 1.8;
+    }
+
+    .error {
+      min-height: 18px;
+      margin: 8px 0;
+      color: #ac5039;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .result-box {
       margin-top: 24px;
-      display: none;
-      animation: fadeIn 0.4s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .summary-box {
-      background-color: var(--primary-soft);
-      border-radius: 16px;
       padding: 20px;
-      text-align: center;
-      margin-bottom: 20px;
-      border: 1px solid var(--border-color);
-      border-left: 4px solid var(--primary-dark);
+      border-radius: 12px;
+      background: #faf7f2;
+      border-left: 4px solid var(--primary);
+    }
+
+    .result-rate {
+      margin-bottom: 10px;
+      color: var(--primary);
+      font-size: 25px;
+      font-weight: 750;
+      overflow-wrap: anywhere;
     }
 
     .result-level {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--primary-dark);
-      margin-bottom: 8px;
+      margin-bottom: 10px;
+      font-weight: 600;
+      line-height: 1.7;
     }
 
     .result-desc {
-      font-size: 0.9rem;
-      line-height: 1.6;
-      color: var(--text-main);
-      text-align: left;
+      color: var(--sub);
+      font-size: 14px;
+      line-height: 1.9;
     }
 
-    .cards-container {
+    .available {
+      margin-bottom: 12px;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .layout {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+    }
+
+    .presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 25px;
+    }
+
+    .preset {
+      padding: 9px 12px;
+      border: 1px solid #ded2c2;
+      border-radius: 30px;
+      background: var(--card);
+      color: #79644f;
+      font-size: 13px;
+    }
+
+    .preset:hover,
+    .preset.active {
+      background: #e9ddcc;
+      border-color: #bda58b;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 12px;
     }
 
-    .tier-card {
-      background-color: var(--primary-soft);
-      border-radius: 16px;
-      padding: 16px 10px;
-      text-align: center;
-      border: 1px solid var(--border-color);
-      transition: all 0.2s ease;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+    input[type="range"] {
+      padding: 0;
+      border: 0;
+      accent-color: #947657;
     }
 
-    .tier-card.recommended {
-      background-color: var(--primary-mid);
-      color: #ffffff;
-      border-color: var(--primary-mid);
-      transform: translateY(-4px);
-      box-shadow: 0 8px 16px rgba(196, 169, 147, 0.28);
+    .small-result {
+      background: #eae0d2;
     }
 
-    .card-title {
+    .result-label {
+      margin-top: 30px;
       font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 8px;
     }
 
-    .tier-card.recommended .card-title {
-      color: #ffffff;
+    .total {
+      margin: 10px 0 26px;
+      font-size: clamp(35px, 6vw, 54px);
+      font-weight: 800;
+      letter-spacing: -1px;
+      overflow-wrap: anywhere;
     }
 
-    .amount {
-      font-family: 'Playfair Display', serif;
+    .total small {
+      margin-right: 8px;
       font-size: 17px;
-      font-weight: 700;
-      margin-bottom: 8px;
-      color: var(--primary-dark);
+      letter-spacing: 0;
     }
 
-    .tier-card.recommended .amount {
-      color: #ffffff;
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      padding: 20px 0;
+      border-top: 1px solid #cfbfaa;
+      border-bottom: 1px solid #cfbfaa;
     }
 
-    .card-desc {
-      font-size: 11px;
-      line-height: 1.4;
-      color: var(--text-muted);
+    .stats span {
+      color: #88735d;
+      font-size: 12px;
     }
 
-    .tier-card.recommended .card-desc {
-      color: rgba(255, 255, 255, 0.92);
+    .stats strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 22px;
+      overflow-wrap: anywhere;
     }
 
-    .footer {
+    .saving-label {
       margin-top: 24px;
-      text-align: center;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      letter-spacing: 0.5px;
+      font-size: 14px;
+      line-height: 1.8;
     }
 
-    @media (max-width: 400px) {
-      .cards-container {
+    .saved {
+      margin-top: 8px;
+      font-size: 30px;
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+
+    .message {
+      min-height: 50px;
+      color: #7f6a54;
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    .bottom {
+      margin: 30px 0 0;
+      text-align: center;
+      color: var(--sub);
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    footer {
+      padding: 22px;
+      text-align: center;
+      color: #a39383;
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+
+    @media (max-width: 680px) {
+      main {
+        padding: 28px 16px;
+      }
+
+      .layout {
         grid-template-columns: 1fr;
       }
-      .tier-card.recommended {
+
+      .card {
+        padding: 24px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .menu-card {
+        gap: 12px;
+        padding: 22px 16px;
+      }
+
+      .icon {
+        width: 38px;
+        height: 42px;
+        font-size: 22px;
+      }
+
+      .menu-card h2 {
+        font-size: 16px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .menu-card {
+        transition: none;
+      }
+
+      .menu-card:hover {
         transform: none;
       }
     }
   </style>
 </head>
+
 <body>
+  <header class="site-header">
+    <button class="brand" id="brand" aria-label="回到工具選單">
+      拾月
+    </button>
 
-  <div class="container">
-    <div class="header">
-      <h1>💰 你適合存多少錢呢！</h1>
-      <p>專屬你的溫柔存錢計畫</p>
+    <div class="tagline">
+      陪你從存不到<br>
+      慢慢變成存得下來
     </div>
+  </header>
 
-    <div class="content">
-      <div class="input-grid">
-        <div class="input-group">
-          <label for="income">每月收入 ($)</label>
-          <div class="input-wrapper">
-            <span>$</span>
-            <input type="number" id="income" inputmode="numeric" value="35000" placeholder="0" min="0">
+  <main>
+    <!-- 選單首頁 -->
+    <section id="homePage" class="home">
+      <div class="intro">
+        <div class="eyebrow">SAVING DAYS</div>
+        <h1 tabindex="-1">存錢，從了解自己開始</h1>
+
+        <p>
+          不知道可以存多少？<br>
+          還是想看看，小錢能累積多少？<br>
+          選一個小工具，陪你一起算算看 🤍
+        </p>
+      </div>
+
+      <nav class="menu" aria-label="存錢工具選單">
+        <a class="menu-card" href="#saving">
+          <span class="icon" aria-hidden="true">💰</span>
+
+          <div class="menu-content">
+            <span class="tool-number">TOOL 01</span>
+            <h2>你適合存多少錢</h2>
+            <p>
+              輸入收入與必要支出<br>
+              看看你目前有多少存錢空間
+            </p>
           </div>
+
+          <span class="arrow" aria-hidden="true">→</span>
+        </a>
+
+        <a class="menu-card" href="#small-money">
+          <span class="icon" aria-hidden="true">🌱</span>
+
+          <div class="menu-content">
+            <span class="tool-number">TOOL 02</span>
+            <h2>小錢也有大大的累積</h2>
+            <p>
+              一杯飲料、一次手續費<br>
+              算算一年下來，累積了多少錢
+            </p>
+          </div>
+
+          <span class="arrow" aria-hidden="true">→</span>
+        </a>
+      </nav>
+
+      <p class="bottom">
+        不用和別人比，照著自己的步調<br>
+        從存不到，慢慢變成存得下來。
+      </p>
+    </section>
+
+    <!-- 第一個工具 -->
+    <section id="savingPage" hidden>
+      <a class="back" href="#home">← 返回工具選單</a>
+
+      <div class="intro">
+        <div class="eyebrow">TOOL 01</div>
+        <h1 tabindex="-1">你適合存多少錢？</h1>
+        <p>先了解自己的收支，再找出舒服的存錢步調。</p>
+      </div>
+
+      <div class="card saving-card">
+        <form id="savingForm" novalidate>
+          <div class="input-group">
+            <label for="income">每月收入（元）</label>
+            <input
+              type="number"
+              id="income"
+              placeholder="請輸入每月總收入"
+              min="0.01"
+              step="0.01"
+              inputmode="decimal"
+              required
+            >
+          </div>
+
+          <div class="input-group">
+            <label for="expenses">每月必要支出（元）</label>
+            <input
+              type="number"
+              id="expenses"
+              placeholder="房租、伙食、水電等必要開銷"
+              min="0"
+              step="0.01"
+              inputmode="decimal"
+              required
+            >
+          </div>
+
+          <div id="savingError" class="error" role="status"></div>
+
+          <button class="primary-button" type="submit">
+            開始計算
+          </button>
+        </form>
+
+        <div class="hint">
+          請記得把貸款、保險等固定支出也算進去。
+          非每月支付的必要費用，可以換算成每月平均金額。
         </div>
 
-        <div class="input-group">
-          <label for="expenses">必要支出 ($)</label>
-          <div class="input-wrapper">
-            <span>$</span>
-            <input type="number" id="expenses" inputmode="numeric" value="23000" placeholder="0" min="0">
+        <div id="savingResult" class="result-box" aria-live="polite" hidden>
+          <div id="savingRate" class="result-rate"></div>
+          <div id="savingAvailable" class="available"></div>
+          <div id="savingLevel" class="result-level"></div>
+          <div id="savingDescription" class="result-desc"></div>
+
+          <div class="hint">
+            此比例是扣除已填必要支出後的剩餘比例，
+            不代表必須全部存下。實際存款仍需預留彈性花費與不定期支出；
+            以下分級僅供自我整理收支參考。
           </div>
         </div>
       </div>
+    </section>
 
-      <button class="btn-calc" onclick="calculateSavings()">開始計算</button>
+    <!-- 第二個工具 -->
+    <section id="smallMoneyPage" hidden>
+      <a class="back" href="#home">← 返回工具選單</a>
 
-      <div class="result-section" id="resultSection">
-        <!-- 狀態評估與溫柔提醒 -->
-        <div class="summary-box" id="summaryBox">
-          <div class="result-level" id="levelText"></div>
-          <div class="result-desc" id="descText"></div>
-        </div>
-
-        <!-- 建議存款目標卡片 -->
-        <div class="cards-container" id="cardsContainer">
-          <div class="tier-card">
-            <div>
-              <div class="card-title">🌱 舒適存</div>
-              <div class="amount" id="comfortableText">$0</div>
-            </div>
-            <div class="card-desc">不太影響目前生活<br>適合先建立習慣</div>
-          </div>
-
-          <div class="tier-card recommended">
-            <div>
-              <div class="card-title">🤍 建議存</div>
-              <div class="amount" id="recommendedText">$0</div>
-            </div>
-            <div class="card-desc">依照目前收支狀況<br>最推薦的存款目標</div>
-          </div>
-
-          <div class="tier-card">
-            <div>
-              <div class="card-title">🔥 挑戰存</div>
-              <div class="amount" id="challengingText">$0</div>
-            </div>
-            <div class="card-desc">想加快累積速度<br>可以試著挑戰看看</div>
-          </div>
-        </div>
+      <div class="intro">
+        <div class="eyebrow">TOOL 02</div>
+        <h1 tabindex="-1">小錢，也有大大的累積。</h1>
+        <p>
+          一杯飲料、一次手續費、一點小習慣<br>
+          那些沒感覺的花費，一年下來是多少呢？
+        </p>
       </div>
 
-      <div class="footer">＠tt_saving</div>
-      <div class="footer" style="margin-top: 6px; font-size: 0.8rem;">「不是一定要存多少，而是看看現在的你，適合從多少開始。」</div>
-    </div>
-  </div>
+      <div class="layout">
+        <section class="card">
+          <h2>算算我的小習慣</h2>
+
+          <div class="presets">
+            <button
+              type="button"
+              class="preset active"
+              data-preset="drink"
+              aria-pressed="true"
+            >一杯飲料</button>
+
+            <button
+              type="button"
+              class="preset"
+              data-preset="coffee"
+              aria-pressed="false"
+            >一杯咖啡</button>
+
+            <button
+              type="button"
+              class="preset"
+              data-preset="fee"
+              aria-pressed="false"
+            >轉帳手續費</button>
+
+            <button
+              type="button"
+              class="preset"
+              data-preset="custom"
+              aria-pressed="false"
+            >自己填看看</button>
+          </div>
+
+          <div class="input-group">
+            <label for="habitName">這筆花費是什麼？</label>
+            <input
+              id="habitName"
+              type="text"
+              maxlength="30"
+              value="飲料"
+              placeholder="例如：飲料、點心、手續費"
+            >
+          </div>
+
+          <div class="input-group">
+            <label for="amount">每次花多少錢？（元）</label>
+            <input
+              id="amount"
+              type="number"
+              min="0"
+              max="10000000"
+              step="0.01"
+              value="60"
+              inputmode="decimal"
+            >
+          </div>
+
+          <div class="input-group">
+            <label for="frequency">多久花幾次？</label>
+
+            <div class="row">
+              <select id="period" aria-label="花費週期">
+                <option value="day">每天</option>
+                <option value="week" selected>每週</option>
+                <option value="month">每月</option>
+              </select>
+
+              <input
+                id="frequency"
+                type="number"
+                min="0"
+                max="10000"
+                step="1"
+                value="5"
+                inputmode="numeric"
+                aria-label="該週期內的花費次數"
+              >
+            </div>
+
+            <div class="hint">
+              右邊填入該週期內的次數，例如：每週 5 次。
+            </div>
+          </div>
+
+          <div id="smallError" class="error" role="status"></div>
+
+          <label for="reduction">
+            如果少花 <span id="percentage">50</span>% 呢？
+          </label>
+
+          <input
+            id="reduction"
+            type="range"
+            min="0"
+            max="100"
+            step="10"
+            value="50"
+          >
+
+          <div class="hint">
+            不用一次全部戒掉，從舒服的比例開始就好。
+          </div>
+        </section>
+
+        <section class="card small-result" aria-live="polite">
+          <h2>原來，小錢會這樣長大</h2>
+
+          <div class="result-label">
+            這個習慣，一年大約花了
+          </div>
+
+          <div class="total">
+            <small>NT$</small><span id="annual">15,600</span>
+          </div>
+
+          <div class="stats">
+            <div>
+              <span>平均一個月</span>
+              <strong id="monthly">$1,300</strong>
+            </div>
+
+            <div>
+              <span>持續 3 年</span>
+              <strong id="threeYears">$46,800</strong>
+            </div>
+          </div>
+
+          <div class="saving-label">
+            少花 <b id="resultPercentage">50%</b>，
+            一年就能多留下
+          </div>
+
+          <div id="saved" class="saved">NT$7,800</div>
+
+          <p id="smallMessage" class="message"></p>
+
+          <button id="copy" type="button" class="primary-button">
+            複製我的計算結果 ↗
+          </button>
+
+          <div id="copyStatus" class="hint" role="status"></div>
+          <div id="basis" class="hint"></div>
+        </section>
+      </div>
+
+      <p class="bottom">
+        存錢不是不能花錢<br>
+        是讓每一筆花費，都更靠近你想要的生活 🤍
+      </p>
+    </section>
+  </main>
+
+  <footer>拾月 tt_saving · 把小錢，慢慢留成喜歡的樣子</footer>
 
   <script>
-    function calculateSavings() {
-      const income = Number(document.getElementById('income').value);
-      const expenses = Number(document.getElementById('expenses').value);
+    const get = id => document.getElementById(id);
 
-      // 輸入值防呆校驗
-      if (isNaN(income) || income <= 0) {
-        alert('請輸入有效的每月收入！');
-        return;
+    const formatter = new Intl.NumberFormat("zh-TW", {
+      maximumFractionDigits: 2
+    });
+
+    const format = number => formatter.format(number);
+
+    /* 頁面切換：支援瀏覽器上一頁與直接連結 */
+    const pages = {
+      home: "homePage",
+      saving: "savingPage",
+      "small-money": "smallMoneyPage"
+    };
+
+    function showPage(moveFocus = false) {
+      const requested = location.hash.slice(1);
+      const page = Object.hasOwn(pages, requested) ? requested : "home";
+
+      Object.entries(pages).forEach(([key, id]) => {
+        get(id).hidden = key !== page;
+      });
+
+      const titles = {
+        home: "拾月｜存錢小工具",
+        saving: "拾月｜你適合存多少錢",
+        "small-money": "拾月｜小錢也有大大的累積"
+      };
+
+      document.title = titles[page];
+
+      if (moveFocus) {
+        get(pages[page]).querySelector("h1").focus({
+          preventScroll: true
+        });
+        window.scrollTo({ top: 0, behavior: "instant" });
       }
-
-      if (isNaN(expenses) || expenses < 0) {
-        alert('必要支出不能為負數喔！');
-        return;
-      }
-
-      const disposable = income - expenses;
-      const ratio = disposable / income;
-
-      const levelText = document.getElementById('levelText');
-      const descText = document.getElementById('descText');
-      const summaryBox = document.getElementById('summaryBox');
-      const cardsContainer = document.getElementById('cardsContainer');
-
-      // 狀況 1：支出超過收入（透支）
-      if (disposable < 0) {
-        levelText.innerText = '目前先別逼自己存錢 🤍';
-        descText.innerText = '目前的必要開銷高於收入，生活可能稍微緊繃一些。現在更重要的不是勉強存款，而是先照顧好生活、慢慢調整支出結構，等狀況穩定再開始喔！';
-        summaryBox.style.borderColor = '#c06c52';
-        cardsContainer.style.display = 'none';
-      } 
-      // 狀況 2：雙條件保護（剩餘 < $2,000 或 剩餘占收入 <= 5%）
-      else if (disposable < 2000 || ratio <= 0.05) {
-        levelText.innerText = '目前先以生活穩定為主 🤍';
-        descText.innerText = '扣除必要支出後，目前能自由運用的空間比較有限。如果還是想養成存錢習慣，可以先從每月 $100 ～ $500 開始，金額不用大，先讓存錢變成習慣就很好。';
-        summaryBox.style.borderColor = '#d49b59';
-        cardsContainer.style.display = 'none';
-      } 
-      // 狀況 3：正常試算三階目標
-      else {
-        let rComfort = 0;
-        let rRecommend = 0;
-        let rChallenge = 0;
-
-        if (ratio <= 0.10) {
-          rComfort = 0.20; rRecommend = 0.30; rChallenge = 0.40;
-        } else if (ratio <= 0.20) {
-          rComfort = 0.25; rRecommend = 0.35; rChallenge = 0.50;
-        } else if (ratio <= 0.30) {
-          rComfort = 0.30; rRecommend = 0.45; rChallenge = 0.60;
-        } else if (ratio <= 0.40) {
-          rComfort = 0.35; rRecommend = 0.50; rChallenge = 0.65;
-        } else {
-          rComfort = 0.40; rRecommend = 0.55; rChallenge = 0.70;
-        }
-
-        // 四捨五入至百位
-        const comfortable = Math.round((disposable * rComfort) / 100) * 100;
-        const recommended = Math.round((disposable * rRecommend) / 100) * 100;
-        const challenging = Math.round((disposable * rChallenge) / 100) * 100;
-
-        levelText.innerText = '這是為你規劃的存款目標 ✨';
-        descText.innerText = `扣除必要支出後，你每個月還有約 $${disposable.toLocaleString()} 的彈性空間。除了存錢之外，記得也留些預算給娛樂與生活品質喔！`;
-        summaryBox.style.borderColor = '#a0826d';
-
-        document.getElementById('comfortableText').innerText = '$' + comfortable.toLocaleString();
-        document.getElementById('recommendedText').innerText = '$' + recommended.toLocaleString();
-        document.getElementById('challengingText').innerText = '$' + challenging.toLocaleString();
-
-        cardsContainer.style.display = 'grid';
-      }
-
-      document.getElementById('resultSection').style.display = 'block';
     }
+
+    window.addEventListener("hashchange", () => showPage(true));
+
+    get("brand").addEventListener("click", () => {
+      if (location.hash === "#home") {
+        showPage(true);
+      } else {
+        location.hash = "home";
+      }
+    });
+
+    /* 工具一：存錢適合度 */
+    get("savingForm").addEventListener("submit", event => {
+      event.preventDefault();
+
+      const income = Number(get("income").value);
+      const expenses = Number(get("expenses").value);
+
+      const valid =
+        get("income").value !== "" &&
+        get("expenses").value !== "" &&
+        Number.isFinite(income) &&
+        Number.isFinite(expenses) &&
+        income > 0 &&
+        expenses >= 0;
+
+      if (!valid) {
+        get("savingError").textContent =
+          "請輸入有效金額：收入需大於 0，必要支出不可小於 0。";
+        get("savingResult").hidden = true;
+        return;
+      }
+
+      const available = income - expenses;
+      const rate = available / income * 100;
+
+      if (!Number.isFinite(rate)) {
+        get("savingError").textContent =
+          "金額超出可計算範圍，請調整後再試。";
+        get("savingResult").hidden = true;
+        return;
+      }
+
+      get("savingError").textContent = "";
+
+      let level;
+      let description;
+      let color;
+
+      if (rate < 0) {
+        level = "支出超過收入｜先別逼自己存";
+        description =
+          "目前收入還不足以支付已填的必要支出，先找出可以調整的支出，或增加收入，讓收支慢慢回到平衡。";
+        color = "#c06c52";
+      } else if (rate < 10) {
+        level = "剩餘比例未滿 10%｜先從小額開始";
+        description =
+          "目前空間比較有限，不用訂太高的目標。先確認生活費足夠，再從負擔得起的小金額建立習慣。";
+        color = "#d49b59";
+      } else if (rate < 20) {
+        level = "剩餘比例 10%～未滿 20%｜適合開始存錢";
+        description =
+          "已經有一些分配空間，可以在預留彈性花費後，設定一筆能持續執行的固定存款。";
+        color = "#b89c62";
+      } else if (rate < 30) {
+        level = "剩餘比例 20%～未滿 30%｜存錢空間不錯";
+        description =
+          "可以試著分配備用金與目標存款，也記得為不定期支出留一點空間，讓計畫更容易持續。";
+        color = "#7d9d78";
+      } else {
+        level = "剩餘比例 30% 以上｜有較多分配空間";
+        description =
+          "可以把剩餘金額分成存款、備用金和生活享受。若實際總是存不下來，可以先確認是否漏算了其他花費。";
+        color = "#5f8d8b";
+      }
+
+      get("savingRate").textContent =
+        "收支剩餘比例：" + rate.toFixed(1) + "%";
+
+      get("savingAvailable").textContent = available >= 0
+        ? "扣除必要支出後，每月剩餘 NT$" + format(available)
+        : "目前每月收支缺口 NT$" + format(Math.abs(available));
+
+      get("savingLevel").textContent = level;
+      get("savingDescription").textContent = description;
+      get("savingResult").style.borderLeftColor = color;
+      get("savingResult").hidden = false;
+    });
+
+    /* 修改收入或支出時，隱藏舊結果 */
+    ["income", "expenses"].forEach(id => {
+      get(id).addEventListener("input", () => {
+        get("savingResult").hidden = true;
+        get("savingError").textContent = "";
+      });
+    });
+
+    /* 工具二：小錢累積 */
+    const presets = {
+      drink: {
+        name: "飲料",
+        amount: 60,
+        period: "week",
+        frequency: 5
+      },
+      coffee: {
+        name: "咖啡",
+        amount: 80,
+        period: "week",
+        frequency: 5
+      },
+      fee: {
+        name: "轉帳手續費",
+        amount: 15,
+        period: "month",
+        frequency: 10
+      },
+      custom: {
+        name: "",
+        amount: 0,
+        period: "day",
+        frequency: 1
+      }
+    };
+
+    const periodsPerYear = {
+      day: 365,
+      week: 52,
+      month: 12
+    };
+
+    const periodLabels = {
+      day: "每天",
+      week: "每週",
+      month: "每月"
+    };
+
+    const basisLabels = {
+      day: "每年 365 天",
+      week: "每年 52 週",
+      month: "每年 12 個月"
+    };
+
+    let annualTotal = 0;
+    let smallValid = true;
+
+    function updateSmallMoney() {
+      const amount = Number(get("amount").value);
+      const frequency = Number(get("frequency").value);
+      const period = get("period").value;
+      const reduction = Number(get("reduction").value);
+
+      smallValid =
+        get("amount").value !== "" &&
+        get("frequency").value !== "" &&
+        Number.isFinite(amount) &&
+        amount >= 0 &&
+        amount <= 10000000 &&
+        Number.isInteger(frequency) &&
+        frequency >= 0 &&
+        frequency <= 10000;
+
+      get("smallError").textContent = smallValid
+        ? ""
+        : "請輸入有效金額（0～1,000 萬）與整數次數（0～10,000）。";
+
+      get("percentage").textContent = reduction;
+      get("resultPercentage").textContent = reduction + "%";
+      get("copyStatus").textContent = "";
+
+      annualTotal = smallValid
+        ? amount * frequency * periodsPerYear[period]
+        : 0;
+
+      get("annual").textContent = smallValid
+        ? format(annualTotal)
+        : "—";
+
+      get("monthly").textContent = smallValid
+        ? "$" + format(annualTotal / 12)
+        : "—";
+
+      get("threeYears").textContent = smallValid
+        ? "$" + format(annualTotal * 3)
+        : "—";
+
+      get("saved").textContent = smallValid
+        ? "NT$" + format(annualTotal * reduction / 100)
+        : "—";
+
+      if (reduction === 0) {
+        get("smallMessage").textContent =
+          "先看見自己的花費，就是開始。";
+      } else if (reduction === 100) {
+        get("smallMessage").textContent =
+          "這是完全省下的情境，依照自己的生活選擇就好。";
+      } else {
+        get("smallMessage").textContent =
+          "不必每次都省下，少花一些，也是一種累積。";
+      }
+
+      get("basis").textContent =
+        "估算方式：" + basisLabels[period] +
+        "，平均每月以年額 ÷ 12 計算。未計入利息、價格變動。";
+    }
+
+    function setActivePreset(selectedButton) {
+      document.querySelectorAll("[data-preset]").forEach(button => {
+        const active = button === selectedButton;
+        button.classList.toggle("active", active);
+        button.setAttribute("aria-pressed", String(active));
+      });
+    }
+
+    document.querySelectorAll("[data-preset]").forEach(button => {
+      button.addEventListener("click", () => {
+        const preset = presets[button.dataset.preset];
+
+        setActivePreset(button);
+
+        get("habitName").value = preset.name;
+        get("amount").value = preset.amount;
+        get("period").value = preset.period;
+        get("frequency").value = preset.frequency;
+
+        updateSmallMoney();
+      });
+    });
+
+    ["habitName", "amount", "period", "frequency", "reduction"]
+      .forEach(id => {
+        get(id).addEventListener("input", () => {
+          if (id !== "reduction") {
+            setActivePreset(null);
+          }
+
+          updateSmallMoney();
+        });
+      });
+
+    get("copy").addEventListener("click", async () => {
+      if (!smallValid) {
+        get("copyStatus").textContent =
+          "請先填入有效的金額與次數。";
+        return;
+      }
+
+      const name = get("habitName").value.trim() || "小習慣";
+      const amount = Number(get("amount").value);
+      const frequency = Number(get("frequency").value);
+      const period = get("period").value;
+      const reduction = Number(get("reduction").value);
+      const saved = annualTotal * reduction / 100;
+
+      const text = [
+        `我的${name}：`,
+        `每次 $${format(amount)}，${periodLabels[period]} ${frequency} 次`,
+        `一年約花 $${format(annualTotal)}`,
+        `少花 ${reduction}%，一年就能多留下 $${format(saved)}！`,
+        "",
+        "拾月｜小錢累積計算機"
+      ].join("\n");
+
+      try {
+        await navigator.clipboard.writeText(text);
+        get("copyStatus").textContent =
+          "已複製！可以貼到限動或分享給朋友 🤍";
+      } catch {
+        get("copyStatus").textContent =
+          "目前瀏覽器無法複製，可以直接截圖保存。";
+      }
+    });
+
+    showPage();
+    updateSmallMoney();
   </script>
 </body>
 </html>
